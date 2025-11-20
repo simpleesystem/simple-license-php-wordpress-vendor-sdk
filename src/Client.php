@@ -58,11 +58,16 @@ class Client
                 );
             }
 
-            $this->token = $data[Constants::RESPONSE_KEY_TOKEN] ?? null;
-            $expiresIn = $data[Constants::RESPONSE_KEY_EXPIRES_IN] ?? 0;
+            $responseData = $data[Constants::RESPONSE_KEY_DATA] ?? [];
+            $this->token = $responseData['token'] ?? null;
+            $expiresIn = $responseData['expires_in'] ?? 0;
             $this->tokenExpiresAt = time() + $expiresIn;
 
-            return $data;
+            return [
+                'success' => true,
+                'token' => $this->token,
+                'expires_in' => $expiresIn,
+            ];
         } catch (NetworkException $e) {
             throw new AuthenticationException('Network error during authentication', Constants::ERROR_CODE_AUTHENTICATION_ERROR, null, 0, $e);
         }

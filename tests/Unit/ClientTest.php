@@ -68,7 +68,8 @@ class ClientTest extends TestCase
 
     public function testCreateLicense(): void
     {
-        // Arrange
+        // Arrange: Authenticate first
+        $authResponse = ResponseFactory::authenticationSuccess();
         $licenseData = [
             'customer_email' => TestingConstants::TEST_CUSTOMER_EMAIL,
             'product_slug' => TestingConstants::TEST_PRODUCT_SLUG,
@@ -80,10 +81,11 @@ class ClientTest extends TestCase
         ], Constants::HTTP_CREATED);
 
         $this->httpClient
-            ->expects($this->once())
+            ->expects($this->exactly(2))
             ->method('post')
-            ->with(Constants::API_ENDPOINT_LICENSES_CREATE, $licenseData)
-            ->willReturn($response);
+            ->willReturnOnConsecutiveCalls($authResponse, $response);
+
+        $this->client->authenticate(TestingConstants::TEST_USERNAME, TestingConstants::TEST_PASSWORD);
 
         // Act
         $result = $this->client->createLicense($licenseData);
@@ -95,16 +97,25 @@ class ClientTest extends TestCase
 
     public function testGetLicenseNotFound(): void
     {
-        // Arrange
+        // Arrange: Authenticate first
+        $authResponse = ResponseFactory::authenticationSuccess();
         $response = ResponseFactory::error(
             'License not found',
             Constants::ERROR_CODE_LICENSE_NOT_FOUND,
             Constants::HTTP_NOT_FOUND
         );
+
+        $this->httpClient
+            ->expects($this->once())
+            ->method('post')
+            ->willReturn($authResponse);
+
         $this->httpClient
             ->expects($this->once())
             ->method('get')
             ->willReturn($response);
+
+        $this->client->authenticate(TestingConstants::TEST_USERNAME, TestingConstants::TEST_PASSWORD);
 
         // Act & Assert
         $this->expectException(LicenseNotFoundException::class);
