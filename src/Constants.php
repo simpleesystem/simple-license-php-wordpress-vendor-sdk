@@ -40,12 +40,18 @@ final class Constants
     public const API_ENDPOINT_LICENSES_UPDATE = '/api/v1/admin/licenses/%s';
     public const API_ENDPOINT_LICENSES_SUSPEND = '/api/v1/admin/licenses/%s/suspend';
     public const API_ENDPOINT_LICENSES_RESUME = '/api/v1/admin/licenses/%s/resume';
+    public const API_ENDPOINT_LICENSES_FREEZE = '/api/v1/admin/licenses/%s/freeze';
     public const API_ENDPOINT_LICENSES_REVOKE = '/api/v1/admin/licenses/%s';
     public const API_ENDPOINT_LICENSES_ACTIVATIONS = '/api/v1/admin/licenses/%s/activations';
 
     // Admin Product Endpoints
     public const API_ENDPOINT_PRODUCTS_LIST = '/api/v1/admin/products';
+    public const API_ENDPOINT_PRODUCTS_CREATE = '/api/v1/admin/products';
     public const API_ENDPOINT_PRODUCTS_GET = '/api/v1/admin/products/%s';
+    public const API_ENDPOINT_PRODUCTS_UPDATE = '/api/v1/admin/products/%s';
+    public const API_ENDPOINT_PRODUCTS_DELETE = '/api/v1/admin/products/%s';
+    public const API_ENDPOINT_PRODUCTS_SUSPEND = '/api/v1/admin/products/%s/suspend';
+    public const API_ENDPOINT_PRODUCTS_RESUME = '/api/v1/admin/products/%s/resume';
 
     // License Status Values
     public const LICENSE_STATUS_ACTIVE = 'ACTIVE';

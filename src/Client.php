@@ -205,6 +205,21 @@ class Client
     }
 
     /**
+     * Freeze a license (freeze entitlements and tier changes)
+     *
+     * @param string $id License ID or key
+     * @param array<string, mixed> $data Freeze options (e.g., ['freeze_entitlements' => true, 'freeze_tier' => true])
+     * @return array<string, mixed> Response
+     * @throws ApiException
+     */
+    public function freezeLicense(string $id, array $data = []): array
+    {
+        $url = sprintf(Constants::API_ENDPOINT_LICENSES_FREEZE, $id);
+        $response = $this->makeRequest('POST', $url, $data);
+        return $this->parseResponse($response);
+    }
+
+    /**
      * Revoke a license
      *
      * @param string $id License ID or key
@@ -256,6 +271,76 @@ class Client
         $url = sprintf(Constants::API_ENDPOINT_PRODUCTS_GET, (string) $id);
         $response = $this->makeRequest('GET', $url);
         return $this->parseResponse($response)[Constants::RESPONSE_KEY_DATA] ?? [];
+    }
+
+    /**
+     * Create a new product
+     *
+     * @param array<string, mixed> $data Product data
+     * @return array<string, mixed> Created product
+     * @throws ApiException
+     */
+    public function createProduct(array $data): array
+    {
+        $response = $this->makeRequest('POST', Constants::API_ENDPOINT_PRODUCTS_CREATE, $data);
+        return $this->parseResponse($response)[Constants::RESPONSE_KEY_DATA] ?? [];
+    }
+
+    /**
+     * Update a product
+     *
+     * @param int|string $id Product ID
+     * @param array<string, mixed> $data Update data
+     * @return array<string, mixed> Updated product
+     * @throws ApiException
+     */
+    public function updateProduct(int|string $id, array $data): array
+    {
+        $url = sprintf(Constants::API_ENDPOINT_PRODUCTS_UPDATE, (string) $id);
+        $response = $this->makeRequest('PUT', $url, $data);
+        return $this->parseResponse($response)[Constants::RESPONSE_KEY_DATA] ?? [];
+    }
+
+    /**
+     * Delete a product
+     *
+     * @param int|string $id Product ID
+     * @return array<string, mixed> Response
+     * @throws ApiException
+     */
+    public function deleteProduct(int|string $id): array
+    {
+        $url = sprintf(Constants::API_ENDPOINT_PRODUCTS_DELETE, (string) $id);
+        $response = $this->makeRequest('DELETE', $url);
+        return $this->parseResponse($response);
+    }
+
+    /**
+     * Suspend a product
+     *
+     * @param int|string $id Product ID
+     * @return array<string, mixed> Response
+     * @throws ApiException
+     */
+    public function suspendProduct(int|string $id): array
+    {
+        $url = sprintf(Constants::API_ENDPOINT_PRODUCTS_SUSPEND, (string) $id);
+        $response = $this->makeRequest('POST', $url);
+        return $this->parseResponse($response);
+    }
+
+    /**
+     * Resume a product
+     *
+     * @param int|string $id Product ID
+     * @return array<string, mixed> Response
+     * @throws ApiException
+     */
+    public function resumeProduct(int|string $id): array
+    {
+        $url = sprintf(Constants::API_ENDPOINT_PRODUCTS_RESUME, (string) $id);
+        $response = $this->makeRequest('POST', $url);
+        return $this->parseResponse($response);
     }
 
     /**
