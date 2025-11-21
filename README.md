@@ -38,23 +38,50 @@ $license = $helper->createLicenseFromOrder($orderId, [
     'product_slug' => 'my-product',
     'tier_code' => '01',
 ]);
+
+// License Management
+$client->suspendLicense($licenseKey);
+$client->resumeLicense($licenseKey);
+$client->freezeLicense($licenseKey, [
+    'freeze_entitlements' => true,
+    'freeze_tier' => true,
+]);
+$activations = $client->getLicenseActivations($licenseKey);
+
+// Product Management
+$products = $client->listProducts();
+$product = $client->createProduct([
+    'name' => 'My Product',
+    'prefix' => 'MP',
+    'active' => true,
+]);
+$client->updateProduct($productId, ['name' => 'Updated Name']);
+$client->suspendProduct($productId);
+$client->resumeProduct($productId);
+$client->deleteProduct($productId);
 ```
 
 ## API Coverage
 
 ### License Management
 - `createLicense()` - Create a new license
-- `listLicenses()` - List licenses with filters
+- `listLicenses()` - List licenses with optional filters (status, limit, offset)
 - `getLicense()` - Get license by ID or key
 - `updateLicense()` - Update license properties
 - `suspendLicense()` - Suspend a license
 - `resumeLicense()` - Resume a suspended license
-- `revokeLicense()` - Revoke a license
-- `getLicenseActivations()` - Get license activations
+- `freezeLicense()` - Freeze license entitlements and/or tier changes
+- `revokeLicense()` - Revoke a license permanently
+- `getLicenseActivations()` - Get all activations for a license
 
 ### Product Management
-- `listProducts()` - List all products
+- `listProducts()` - List all products (vendor-scoped)
 - `getProduct()` - Get product by ID
+- `createProduct()` - Create a new product
+- `updateProduct()` - Update product properties
+- `deleteProduct()` - Delete a product
+- `suspendProduct()` - Suspend a product
+- `resumeProduct()` - Resume a suspended product
 
 ## WooCommerce Integration
 
